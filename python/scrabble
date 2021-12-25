@@ -1,0 +1,68 @@
+letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+points = [1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 4, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10]
+
+# append lowercase letters to letters
+
+letters_length = len(letters)
+i = 0
+while i < letters_length:
+  letters.append(letters[i].lower())
+  i += 1
+
+# duplicate points values to match the lowercase letters
+
+points_length = len(points)
+i = 0
+while i < points_length:
+  points.append(points[i])
+  i += 1
+
+# build array of key:value pairs to match letter and points
+
+letter_to_points = {key:value for key, value in zip(letters,points)}
+letter_to_points.update({"":0})
+
+# dictionary for storing players and scores
+
+player_to_points = {}
+
+# sample dictionary of players and their played words
+
+player_to_words = {"player1":["BLUE","TENNIS","EXIT"], "wordNerd":["EARTH","EYES","MACHINE"],"Lexi Con":["ERASER","BELLY","HUSKY"],"Prof Reader":["ZAP","COMA","PERIOD"]}
+
+# function to calculate the points of a played word
+
+def score_word(word):
+  point_total = 0
+  for char in word:
+    try:
+      point_total += letter_to_points[char]
+    except:
+      point_total += 0
+  return point_total
+
+# the function play_word takes the player who plays the word and the word itself,
+# and updates player_to_word dictionary and calls update_point_totals
+# I the player doesn't exist, a new one will be created.
+def play_word(player,word):
+  if not player in player_to_words:
+    player_to_words.update({player:[]})
+  player_to_words[player].append(word)
+  update_point_totals()
+
+# update_point_totals calculates the total score of a player and updates
+# the player_to_points dictionary
+
+def update_point_totals():
+  for player, words in player_to_words.items():
+    player_points = 0
+    for word in words:
+      player_points += score_word(word)
+    player_to_points.update({player:player_points})
+
+# example
+
+play_word("Matt", "bazinga")
+
+print("WORDS:\n" + str(player_to_words) + "\n")
+print("SCORES:\n" + str(player_to_points))
